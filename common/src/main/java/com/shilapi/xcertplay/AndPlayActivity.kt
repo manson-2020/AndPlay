@@ -36,7 +36,7 @@ import java.util.Date
 import java.util.Locale
 
 /** DiAuto's visual language, with a connection flow for an independent CarPlay receiver. */
-class DiPlayActivity : ComponentActivity() {
+class AndPlayActivity : ComponentActivity() {
     private val handler = Handler(Looper.getMainLooper())
     private var page = "home"
     private var setupError: String? = null
@@ -56,7 +56,7 @@ class DiPlayActivity : ComponentActivity() {
         override fun run() { refreshStatus(); handler.postDelayed(this, 1000) }
     }
     private val bluetoothPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-        if (granted) choosePhone() else permissionHelp("Nearby devices", "Allow Nearby devices so DiPlay can connect to your paired iPhone.")
+        if (granted) choosePhone() else permissionHelp(getString(R.string.nearby_devices), getString(R.string.nearby_devices_permission))
     }
     private val export = registerForActivityResult(ActivityResultContracts.CreateDocument("text/plain")) { uri ->
         if (uri != null) exportDiagnostics(uri)
@@ -71,8 +71,8 @@ class DiPlayActivity : ComponentActivity() {
             isAppearanceLightStatusBars = false
             hide(WindowInsetsCompat.Type.statusBars())
         }
-        setupError = runCatching { DiPlayBootstrap.ensure(this) }.exceptionOrNull()?.let {
-            "Local setup could not finish. Reinstall the complete DiPlay beta APK and try again."
+        setupError = runCatching { AndPlayBootstrap.ensure(this) }.exceptionOrNull()?.let {
+            getString(R.string.setup_error)
         }
         page = savedInstanceState?.getString("page") ?: intent.getStringExtra("page") ?: "home"
         render()
@@ -99,7 +99,7 @@ class DiPlayActivity : ComponentActivity() {
         if (initialLaunch) {
             initialLaunch = false
             if (setupError == null && !CarPlayBackgroundSession.hasSession() &&
-                DiPlayPreferences.autoConnect(this) && intent.getStringExtra("page") == null) {
+                AndPlayPreferences.autoConnect(this) && intent.getStringExtra("page") == null) {
                 handler.post { connect(AirPlayPersistence.loadWirelessEnabled(this)) }
             }
         }
@@ -112,9 +112,9 @@ class DiPlayActivity : ComponentActivity() {
         val content = column().apply { setPadding(dp(32), dp(24), dp(32), dp(32)) }
         scroll.addView(content)
         val header = row().apply { gravity = Gravity.CENTER_VERTICAL }
-        header.addView(ImageView(this).apply { setImageResource(R.drawable.ic_carplay); contentDescription = "CarPlay" }, LinearLayout.LayoutParams(dp(36), dp(36)))
-        header.addView(label("DiPlay", 26, TEXT, true).apply { setPadding(dp(12), 0, 0, 0) }, LinearLayout.LayoutParams(0, dp(56), 1f))
-        header.addView(button(if (page == "home") "Car home" else "Back", false) {
+        header.addView(ImageView(this).apply { setImageResource(R.drawable.ic_carplay); contentDescription = getString(R.string.carplay) }, LinearLayout.LayoutParams(dp(36), dp(36)))
+        header.addView(label(getString(R.string.andplay_brand), 26, TEXT, true).apply { setPadding(dp(12), 0, 0, 0) }, LinearLayout.LayoutParams(0, dp(56), 1f))
+        header.addView(button(if (page == "home") getString(R.string.car_home) else getString(R.string.back), false) {
             if (page == "home") startActivity(Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME))
             else { page = "home"; render() }
         }, LinearLayout.LayoutParams(dp(130), dp(56)))
@@ -133,25 +133,25 @@ class DiPlayActivity : ComponentActivity() {
         val wide = resources.configuration.screenWidthDp >= 850
         val body = column()
         val left = column()
-        left.addView(label("YOUR PHONE. YOUR DRIVE.", 12, ACCENT, true).apply { letterSpacing = .16f })
-        left.addView(label("A familiar drive.", if (wide) 42 else 36, TEXT, true).apply { setPadding(0, dp(12), 0, dp(10)) })
-        left.addView(label("Your maps, music and conversations.\nCarPlay, right here on your car display.", 19, MUTED))
+        left.addView(label(getString(R.string.hero_kicker), 12, ACCENT, true).apply { letterSpacing = .16f })
+        left.addView(label(getString(R.string.hero_title), if (wide) 42 else 36, TEXT, true).apply { setPadding(0, dp(12), 0, dp(10)) })
+        left.addView(label(getString(R.string.hero_subtitle), 19, MUTED))
         val card = card()
-        card.addView(label("WIRELESS CARPLAY", 12, ACCENT, true).apply { letterSpacing = .12f })
-        status = label("Ready when you are", 24, TEXT, true).apply { setPadding(0, dp(10), 0, dp(16)) }
+        card.addView(label(getString(R.string.wireless_carplay), 12, ACCENT, true).apply { letterSpacing = .12f })
+        status = label(getString(R.string.status_ready_default), 24, TEXT, true).apply { setPadding(0, dp(10), 0, dp(16)) }
         card.addView(status)
-        connectButton = button("Connect phone", true) {
+        connectButton = button(getString(R.string.connect_phone), true) {
             if (CarPlayBackgroundSession.hasSession()) openProjection()
             else connect(true)
         }
         card.addView(connectButton, matchButton())
-        card.addView(label("Pair your iPhone with the car’s Bluetooth, then connect.\nKeep Bluetooth and Wi-Fi on.", 15, MUTED).apply { setPadding(0, dp(14), 0, 0) })
+        card.addView(label(getString(R.string.pair_hint), 15, MUTED).apply { setPadding(0, dp(14), 0, 0) })
         if (carHotspotOff()) {
-            card.addView(label("The car hotspot “${AirPlayPersistence.loadManualHotspotSsid(this)}” is off. Turn it on in the car settings before connecting.", 15, WARNING).apply { setPadding(0, dp(14), 0, 0) })
-            card.addView(button("Open car hotspot settings", false) { openCarWifiSettings() }, matchButton(10, 56))
+            card.addView(label(getString(R.string.hotspot_off_home_hint, AirPlayPersistence.loadManualHotspotSsid(this)), 15, WARNING).apply { setPadding(0, dp(14), 0, 0) })
+            card.addView(button(getString(R.string.open_car_hotspot_settings), false) { openCarWifiSettings() }, matchButton(10, 56))
         }
-        card.addView(button("Choose iPhone", false) { choosePhone() }, matchButton(16, 56))
-        disconnectButton = button("Disconnect", false) {
+        card.addView(button(getString(R.string.choose_iphone), false) { choosePhone() }, matchButton(16, 56))
+        disconnectButton = button(getString(R.string.disconnect), false) {
             disconnectButton?.isEnabled = false
             CarPlayBackgroundSession.stop { runOnUiThread { refreshStatus() } }
         }.apply { visibility = View.GONE }
@@ -159,18 +159,18 @@ class DiPlayActivity : ComponentActivity() {
         val right = column().apply { gravity = Gravity.CENTER_HORIZONTAL }
         val logo = ImageView(this).apply {
             setImageResource(R.drawable.ic_carplay)
-            contentDescription = "CarPlay icon"
+            contentDescription = getString(R.string.carplay_icon_desc)
             scaleType = ImageView.ScaleType.FIT_CENTER
         }
         val branding = column().apply {
             gravity = Gravity.CENTER
             addView(logo, LinearLayout.LayoutParams(dp(96), dp(96)))
         }
-        right.addView(button("Connect with USB", false) { connect(false) }, matchButton())
-        right.addView(label("Plug your iPhone into a USB data port.\nAllow CarPlay when your iPhone asks.", 14, MUTED).apply { gravity = Gravity.CENTER; setPadding(dp(8), dp(10), dp(8), dp(24)) })
-        right.addView(button("Settings", false) { page = "settings"; render() }, matchButton())
-        right.addView(label("Make DiPlay feel right for your car.", 14, MUTED).apply { gravity = Gravity.CENTER; setPadding(0, dp(10), 0, dp(24)) })
-        right.addView(label("PUBLIC PREVIEW  ·  ${version()}", 12, MUTED).apply { letterSpacing = .08f })
+        right.addView(button(getString(R.string.connect_usb), false) { connect(false) }, matchButton())
+        right.addView(label(getString(R.string.usb_hint), 14, MUTED).apply { gravity = Gravity.CENTER; setPadding(dp(8), dp(10), dp(8), dp(24)) })
+        right.addView(button(getString(R.string.settings), false) { page = "settings"; render() }, matchButton())
+        right.addView(label(getString(R.string.settings_hint), 14, MUTED).apply { gravity = Gravity.CENTER; setPadding(0, dp(10), 0, dp(24)) })
+        right.addView(label(getString(R.string.public_preview_version, version()), 12, MUTED).apply { letterSpacing = .08f })
         if (wide) {
             // Both rows share column widths. The USB button starts at the wireless
             // card's top edge, independently of hero wrapping or font scaling.
@@ -197,74 +197,74 @@ class DiPlayActivity : ComponentActivity() {
     }
 
     private fun settings(content: LinearLayout) {
-        content.addView(label("Your drive, your way.", 34, TEXT, true))
-        content.addView(label("Apply reconnects CarPlay for size, resolution, music buffer and frame rate. Other changes apply to your next connection.", 17, MUTED).apply { setPadding(0, dp(8), 0, dp(24)) })
-        section(content, "Automatic connection") { card ->
-            toggle(card, "Connect when DiPlay opens", "Use your last connection type and selected iPhone.", DiPlayPreferences.autoConnect(this)) { DiPlayPreferences.saveAutoConnect(this, it) }
-            toggle(card, "Open after the car starts", "Availability depends on your head unit’s startup settings.", AirPlayPersistence.loadAutoStartOnBoot(this)) { AirPlayPersistence.saveAutoStartOnBoot(this, it) }
-            card.addView(button("Choose iPhone · ${DiPlayPreferences.phoneName(this)}", false) { choosePhone() }, matchButton(12, 60))
+        content.addView(label(getString(R.string.settings_title), 34, TEXT, true))
+        content.addView(label(getString(R.string.settings_subtitle), 17, MUTED).apply { setPadding(0, dp(8), 0, dp(24)) })
+        section(content, getString(R.string.section_auto_connection)) { card ->
+            toggle(card, getString(R.string.auto_connect_title), getString(R.string.auto_connect_desc), AndPlayPreferences.autoConnect(this)) { AndPlayPreferences.saveAutoConnect(this, it) }
+            toggle(card, getString(R.string.auto_start_title), getString(R.string.auto_start_desc), AirPlayPersistence.loadAutoStartOnBoot(this)) { AirPlayPersistence.saveAutoStartOnBoot(this, it) }
+            card.addView(button(getString(R.string.choose_iphone_with_name, AndPlayPreferences.phoneName(this)), false) { choosePhone() }, matchButton(12, 60))
         }
-        section(content, "Wireless connection") { card -> wirelessLinkControls(card) }
-        section(content, "Display and performance") { card ->
+        section(content, getString(R.string.section_wireless_connection)) { card -> wirelessLinkControls(card) }
+        section(content, getString(R.string.section_display_performance)) { card ->
             carPlaySizeControl(card)
-            choice(card, "Resolution", listOf("Native", "80% · lighter load", "60% · lightest load"), listOf(10, 8, 6).indexOf(AirPlayPersistence.loadDisplayScaleTenths(this)).coerceAtLeast(0)) { AirPlayPersistence.saveDisplayScaleTenths(this, listOf(10, 8, 6)[it]) }
+            choice(card, getString(R.string.resolution), listOf(getString(R.string.resolution_native), getString(R.string.resolution_80), getString(R.string.resolution_60)), listOf(10, 8, 6).indexOf(AirPlayPersistence.loadDisplayScaleTenths(this)).coerceAtLeast(0)) { AirPlayPersistence.saveDisplayScaleTenths(this, listOf(10, 8, 6)[it]) }
             val bufferPresets = com.shilapi.xcertplay.media.MediaAudioBuffer.presets
-            choice(card, "Music buffer", listOf("300 ms · default", "500 ms", "1000 ms · most stable"),
+            choice(card, getString(R.string.music_buffer), listOf(getString(R.string.music_buffer_300), getString(R.string.music_buffer_500), getString(R.string.music_buffer_1000)),
                 bufferPresets.indexOf(AirPlayPersistence.loadMediaBufferMillis(this)).coerceAtLeast(0)) {
                 AirPlayPersistence.saveMediaBufferMillis(this, bufferPresets[it])
             }
-            choice(card, "Frame rate", listOf("30 fps · lighter load", "60 fps · smoother motion"), if (AirPlayPersistence.loadFps(this) == 60) 1 else 0) { AirPlayPersistence.saveFps(this, if (it == 1) 60 else 30) }
-            toggle(card, "Efficient video", "Use HEVC. Leave off for the widest head-unit compatibility.", AirPlayPersistence.loadHevcEnabled(this)) { AirPlayPersistence.saveHevcEnabled(this, it) }
-            toggle(card, "Right-hand drive", "Place CarPlay’s controls closer to the driver.", AirPlayPersistence.loadRightHandDrive(this)) { AirPlayPersistence.saveRightHandDrive(this, it) }
-            toggle(card, "Full screen", "Hide the car’s system bars while CarPlay is open.", AirPlayPersistence.loadHideTopBar(this) && AirPlayPersistence.loadHideBottomBar(this)) {
+            choice(card, getString(R.string.frame_rate), listOf(getString(R.string.frame_rate_30), getString(R.string.frame_rate_60)), if (AirPlayPersistence.loadFps(this) == 60) 1 else 0) { AirPlayPersistence.saveFps(this, if (it == 1) 60 else 30) }
+            toggle(card, getString(R.string.efficient_video), getString(R.string.efficient_video_desc), AirPlayPersistence.loadHevcEnabled(this)) { AirPlayPersistence.saveHevcEnabled(this, it) }
+            toggle(card, getString(R.string.rhd), getString(R.string.rhd_desc), AirPlayPersistence.loadRightHandDrive(this)) { AirPlayPersistence.saveRightHandDrive(this, it) }
+            toggle(card, getString(R.string.full_screen), getString(R.string.full_screen_desc), AirPlayPersistence.loadHideTopBar(this) && AirPlayPersistence.loadHideBottomBar(this)) {
                 AirPlayPersistence.saveHideTopBar(this, it); AirPlayPersistence.saveHideBottomBar(this, it)
             }
         }
-        if (com.shilapi.xcertplay.hud.BydOutputSettings.available(this)) section(content, "BYD navigation") { card ->
-            toggle(card, "Navigation on HUD and instrument cluster",
-                "Show phone navigation arrows, distance and street names on supported BYD displays. Vehicle compatibility varies.",
+        if (com.shilapi.xcertplay.hud.BydOutputSettings.available(this)) section(content, getString(R.string.section_byd_navigation)) { card ->
+            toggle(card, getString(R.string.byd_hud_title),
+                getString(R.string.byd_hud_desc),
                 com.shilapi.xcertplay.hud.BydOutputSettings.enabled(this)) { com.shilapi.xcertplay.hud.BydOutputSettings.setEnabled(this, it) }
         }
-        section(content, "Permissions and connection help") { card ->
-            card.addView(label("Nearby devices connects your iPhone. Microphone enables Siri and calls. Older Android versions also require Location for wireless setup. USB mode may ask for a local VPN connection.", 16, MUTED))
-            card.addView(button("App permissions", false) { openSystem(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:$packageName"))) }, matchButton(16, 60))
-            card.addView(button("Bluetooth settings", false) { openSystem(Intent(Settings.ACTION_BLUETOOTH_SETTINGS)) }, matchButton(10, 60))
-            card.addView(button("Wireless connection help", false) { wirelessHelp() }, matchButton(10, 60))
+        section(content, getString(R.string.section_permissions)) { card ->
+            card.addView(label(getString(R.string.permissions_desc), 16, MUTED))
+            card.addView(button(getString(R.string.app_permissions), false) { openSystem(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:$packageName"))) }, matchButton(16, 60))
+            card.addView(button(getString(R.string.bluetooth_settings), false) { openSystem(Intent(Settings.ACTION_BLUETOOTH_SETTINGS)) }, matchButton(10, 60))
+            card.addView(button(getString(R.string.wireless_help), false) { wirelessHelp() }, matchButton(10, 60))
         }
-        section(content, "About and diagnostics") { card ->
-            card.addView(button("About DiPlay", false) { page = "about"; render() }, matchButton(0, 60))
-            exportButton = button(if (exportInProgress) "Saving report…" else "Save diagnostic report", false) {
+        section(content, getString(R.string.section_about_diagnostics)) { card ->
+            card.addView(button(getString(R.string.about_andplay), false) { page = "about"; render() }, matchButton(0, 60))
+            exportButton = button(if (exportInProgress) getString(R.string.saving_report) else getString(R.string.save_report), false) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) exportDiagnostics()
                 else chooseReportDestination()
             }.apply { isEnabled = !exportInProgress }
             card.addView(exportButton, matchButton(10, 60))
-            val destination = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) "Reports save to Downloads/DiPlay. " else "Choose where to save your report. "
-            card.addView(label(destination + "Nothing is sent automatically. Protocol payloads and credentials are excluded.", 14, MUTED).apply { setPadding(0, dp(12), 0, 0) })
+            val destination = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) getString(R.string.report_destination_q) else getString(R.string.report_destination_legacy)
+            card.addView(label(destination + getString(R.string.report_privacy_note), 14, MUTED).apply { setPadding(0, dp(12), 0, 0) })
         }
     }
 
     private fun about(content: LinearLayout) {
-        content.addView(label("DiPlay", 40, TEXT, true))
-        content.addView(label("CarPlay, at home in your car.", 20, MUTED).apply { setPadding(0, dp(8), 0, dp(24)) })
-        section(content, "Public preview · ${version()}") { card ->
-            card.addView(label("An independent CarPlay receiver for Android head units. Wired and wireless connections run on the head unit, with local authentication. A standard iPhone can connect without a jailbreak, Mac, dongle or sign-in.\n\nThis preview uses an experimental accessory identity. Compatibility with every iPhone and head unit is still being tested. It is not an Apple-certified product.", 17, TEXT))
+        content.addView(label(getString(R.string.andplay_brand), 40, TEXT, true))
+        content.addView(label(getString(R.string.about_tagline), 20, MUTED).apply { setPadding(0, dp(8), 0, dp(24)) })
+        section(content, getString(R.string.about_preview_section, version())) { card ->
+            card.addView(label(getString(R.string.about_preview_body), 17, TEXT))
         }
-        section(content, "Made possible by open source") { card ->
-            card.addView(label("Receiver based on xcertplay, licensed under GPL-3.0. DiPlay’s interface follows DiAuto’s design, licensed under AGPL-3.0.\n\nIncludes AndroidX, Bouncy Castle, JmDNS and SLF4J. Source and license notices accompany this release.\n\nCarPlay and the CarPlay icon belong to Apple Inc. DiPlay is an independent project.", 16, MUTED))
+        section(content, getString(R.string.about_oss_section)) { card ->
+            card.addView(label(getString(R.string.about_oss_body), 16, MUTED))
         }
     }
 
-    // The car hotspot link needs the hotspot on; DiPlay only checks it (turning it on needs ADB-only permission).
+    // The car hotspot link needs the hotspot on; AndPlay only checks it (turning it on needs ADB-only permission).
     private fun carHotspotOff(): Boolean =
         AirPlayPersistence.loadWirelessHotspotMode(this) == WirelessHotspotMode.MANUAL &&
             com.shilapi.xcertplay.network.CarHotspotStatus.isEnabled(this) == false
 
     private fun carHotspotOffDialog() {
-        AlertDialog.Builder(this).setTitle("Car hotspot is off")
-            .setMessage("DiPlay connects through the car hotspot “${AirPlayPersistence.loadManualHotspotSsid(this)}”. Turn it on in the car settings, then connect.")
-            .setPositiveButton("Open car settings") { _, _ -> openCarWifiSettings() }
-            .setNeutralButton("Connect") { _, _ -> connect(true) }
-            .setNegativeButton("Cancel", null).show()
+        AlertDialog.Builder(this).setTitle(getString(R.string.hotspot_off_dialog_title))
+            .setMessage(getString(R.string.hotspot_off_dialog_message, AirPlayPersistence.loadManualHotspotSsid(this)))
+            .setPositiveButton(getString(R.string.open_car_settings)) { _, _ -> openCarWifiSettings() }
+            .setNeutralButton(getString(R.string.connect)) { _, _ -> connect(true) }
+            .setNegativeButton(getString(R.string.cancel), null).show()
     }
 
     // BYD maps the AOSP tether action to its own hotspot screen; other firmware falls back to Wi-Fi settings.
@@ -288,13 +288,13 @@ class DiPlayActivity : ComponentActivity() {
     // The runtime config rejects manual mode without valid credentials, so it is only saved together with them.
     private fun wirelessLinkControls(parent: LinearLayout) {
         val carHotspot = AirPlayPersistence.loadWirelessHotspotMode(this) == WirelessHotspotMode.MANUAL
-        val options = arrayOf("Wi-Fi Direct · default", "Car hotspot")
-        val control = button("Wireless link · ${options[if (carHotspot) 1 else 0]}", false) {}
+        val options = arrayOf(getString(R.string.wireless_link_wifi_p2p), getString(R.string.wireless_link_car_hotspot))
+        val control = button(getString(R.string.wireless_link_button, options[if (carHotspot) 1 else 0]), false) {}
         control.setOnClickListener {
             var selection = if (carHotspot) 1 else 0
-            AlertDialog.Builder(this).setTitle("Wireless link")
+            AlertDialog.Builder(this).setTitle(getString(R.string.wireless_link))
                 .setSingleChoiceItems(options, selection) { _, index -> selection = index }
-                .setPositiveButton(if (CarPlayBackgroundSession.hasSession()) "Apply and reconnect" else "Save") { _, _ ->
+                .setPositiveButton(if (CarPlayBackgroundSession.hasSession()) getString(R.string.apply_and_reconnect) else getString(R.string.save)) { _, _ ->
                     when {
                         (selection == 1) == carHotspot -> Unit
                         selection == 0 -> applyWirelessLink(WirelessHotspotMode.WIFI_P2P)
@@ -304,33 +304,33 @@ class DiPlayActivity : ComponentActivity() {
                             applyWirelessLink(WirelessHotspotMode.MANUAL)
                         }
                     }
-                }.setNegativeButton("Cancel", null).show()
+                }.setNegativeButton(getString(R.string.cancel), null).show()
         }
         parent.addView(control, matchButton(0, 60)); parent.addView(space(12))
         if (!carHotspot) {
-            parent.addView(label("DiPlay creates its own Wi-Fi Direct network for the iPhone.", 14, MUTED).apply {
+            parent.addView(label(getString(R.string.wireless_link_p2p_desc), 14, MUTED).apply {
                 setPadding(0, 0, 0, dp(18))
             })
             return
         }
         val ssid = storedSsid()
         val password = storedPassword()
-        parent.addView(button("Hotspot name · $ssid", false) {
-            textInput("Car hotspot name", ssid, secret = false) { value ->
+        parent.addView(button(getString(R.string.hotspot_name_button, ssid), false) {
+            textInput(getString(R.string.hotspot_name_hint), ssid, secret = false) { value ->
                 hotspotError(value, password)?.let { toast(it); return@textInput }
                 saveHotspotCredentials(value, password)
                 render()
             }
         }, matchButton(0, 60))
         parent.addView(space(12))
-        parent.addView(button("Hotspot password · ${if (password.isEmpty()) "none" else "•".repeat(8)}", false) {
-            textInput("Car hotspot password", password, secret = true) { value ->
+        parent.addView(button(getString(R.string.hotspot_password_button, if (password.isEmpty()) getString(R.string.hotspot_password_none) else "•".repeat(8)), false) {
+            textInput(getString(R.string.hotspot_password_hint), password, secret = true) { value ->
                 hotspotError(ssid, value)?.let { toast(it); return@textInput }
                 saveHotspotCredentials(ssid, value)
                 render()
             }
         }, matchButton(0, 60))
-        parent.addView(label("Turn on the hotspot in the car settings first and enter the same name and password here. The iPhone joins this network for CarPlay. Changes apply to your next connection.", 14, MUTED).apply {
+        parent.addView(label(getString(R.string.hotspot_credentials_desc), 14, MUTED).apply {
             setPadding(0, dp(8), 0, dp(18))
         })
     }
@@ -350,8 +350,8 @@ class DiPlayActivity : ComponentActivity() {
     }
 
     private fun askHotspotCredentials(done: (String, String) -> Unit) {
-        textInput("Car hotspot name", storedSsid(), secret = false) { ssid ->
-            textInput("Car hotspot password", storedPassword(), secret = true) { password ->
+        textInput(getString(R.string.hotspot_name_hint), storedSsid(), secret = false) { ssid ->
+            textInput(getString(R.string.hotspot_password_hint), storedPassword(), secret = true) { password ->
                 val error = hotspotError(ssid, password)
                 if (error != null) toast(error) else done(ssid, password)
             }
@@ -375,17 +375,17 @@ class DiPlayActivity : ComponentActivity() {
             }
         }
         AlertDialog.Builder(this).setTitle(title).setView(input)
-            .setPositiveButton("Save") { _, _ -> save(input.text.toString().let { if (secret) it else it.trim() }) }
-            .setNegativeButton("Cancel", null).show()
+            .setPositiveButton(getString(R.string.save)) { _, _ -> save(input.text.toString().let { if (secret) it else it.trim() }) }
+            .setNegativeButton(getString(R.string.cancel), null).show()
     }
 
     private fun carPlaySizeControl(parent: LinearLayout) {
         val sizes = com.shilapi.xcertplay.airplay.CarPlaySize.entries
         val current = com.shilapi.xcertplay.airplay.CarPlaySize.fromWidthMillimeters(AirPlayPersistence.loadWidthPhysicalMm(this))
-        choice(parent, "CarPlay size", sizes.map { it.label }, sizes.indexOf(current)) {
+        choice(parent, getString(R.string.carplay_size), sizes.map { it.label }, sizes.indexOf(current)) {
             AirPlayPersistence.saveWidthPhysicalMm(this, sizes[it].widthMillimeters)
         }
-        parent.addView(label("Changes the size of CarPlay icons and text. Applying a size reconnects CarPlay.", 14, MUTED).apply {
+        parent.addView(label(getString(R.string.carplay_size_desc), 14, MUTED).apply {
             setPadding(0, 0, 0, dp(18))
         })
     }
@@ -393,10 +393,10 @@ class DiPlayActivity : ComponentActivity() {
     private fun connect(wireless: Boolean) {
         if (setupError != null) { toast(setupError!!); return }
         if (wireless && carHotspotOff()) { carHotspotOffDialog(); return }
-        if (wireless && DiPlayPreferences.phoneAddress(this) == null) {
+        if (wireless && AndPlayPreferences.phoneAddress(this) == null) {
             pendingWireless = true; choosePhone(); return
         }
-        val preferences = getSharedPreferences("diplay", MODE_PRIVATE)
+        val preferences = getSharedPreferences("andplay", MODE_PRIVATE)
         if (Build.VERSION.SDK_INT >= 33 && checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED && !preferences.getBoolean("notification_asked", false)) {
             preferences.edit().putBoolean("notification_asked", true).apply()
             notificationTransport = wireless
@@ -419,37 +419,37 @@ class DiPlayActivity : ComponentActivity() {
         }
         val adapter = getSystemService(BluetoothManager::class.java)?.adapter
         if (adapter == null || !adapter.isEnabled) {
-            AlertDialog.Builder(this).setTitle("Turn on Bluetooth")
-                .setMessage("Enable the car’s Bluetooth and pair your iPhone first.")
-                .setPositiveButton("Open Bluetooth") { _, _ -> openSystem(Intent(Settings.ACTION_BLUETOOTH_SETTINGS)) }
-                .setNegativeButton("Later", null).show(); return
+            AlertDialog.Builder(this).setTitle(getString(R.string.bluetooth_on_title))
+                .setMessage(getString(R.string.bluetooth_on_message))
+                .setPositiveButton(getString(R.string.open_bluetooth)) { _, _ -> openSystem(Intent(Settings.ACTION_BLUETOOTH_SETTINGS)) }
+                .setNegativeButton(getString(R.string.later), null).show(); return
         }
         val devices = runCatching { adapter.bondedDevices.sortedBy { it.name ?: "" } }.getOrDefault(emptyList())
         if (devices.isEmpty()) {
-            AlertDialog.Builder(this).setTitle("Pair your iPhone")
-                .setMessage("On your iPhone, open Settings → Bluetooth and pair with the car. Then return to DiPlay and choose Connect phone.")
-                .setPositiveButton("Open Bluetooth") { _, _ -> openSystem(Intent(Settings.ACTION_BLUETOOTH_SETTINGS)) }
-                .setNegativeButton("Got it", null).show(); return
+            AlertDialog.Builder(this).setTitle(getString(R.string.pair_iphone_title))
+                .setMessage(getString(R.string.pair_iphone_message))
+                .setPositiveButton(getString(R.string.open_bluetooth)) { _, _ -> openSystem(Intent(Settings.ACTION_BLUETOOTH_SETTINGS)) }
+                .setNegativeButton(getString(R.string.got_it), null).show(); return
         }
-        AlertDialog.Builder(this).setTitle("Choose your iPhone")
+        AlertDialog.Builder(this).setTitle(getString(R.string.choose_iphone_title))
             .setItems(devices.map { device ->
-                val name = device.name ?: "Paired device"
+                val name = device.name ?: getString(R.string.paired_device)
                 if (devices.count { it.name == device.name } > 1) "$name · ${device.address.takeLast(5)}" else name
             }.toTypedArray()) { _, index ->
                 val device = devices[index]
-                DiPlayPreferences.savePhone(this, device.address, device.name ?: "iPhone")
+                AndPlayPreferences.savePhone(this, device.address, device.name ?: getString(R.string.iphone))
                 val start = pendingWireless; pendingWireless = false
                 render()
                 if (start) connect(true)
-            }.setNeutralButton("Pair another") { _, _ -> openSystem(Intent(Settings.ACTION_BLUETOOTH_SETTINGS)) }
-            .setNegativeButton("Cancel") { _, _ -> pendingWireless = false }.show()
+            }.setNeutralButton(getString(R.string.pair_another)) { _, _ -> openSystem(Intent(Settings.ACTION_BLUETOOTH_SETTINGS)) }
+            .setNegativeButton(getString(R.string.cancel)) { _, _ -> pendingWireless = false }.show()
     }
 
     private fun wirelessHelp() {
-        AlertDialog.Builder(this).setTitle("Wireless connection help")
-            .setMessage("Pair your iPhone with the car’s Bluetooth, keep Wi-Fi on, and allow CarPlay on the iPhone. Close any other phone-projection app.\n\nIf a previous projection app left its connection running, reset CarPlay Wi-Fi below and connect again. Your car’s normal internet Wi-Fi stays on.")
-            .setPositiveButton("Got it", null)
-            .setNeutralButton("Reset CarPlay Wi-Fi") { _, _ ->
+        AlertDialog.Builder(this).setTitle(getString(R.string.wireless_help))
+            .setMessage(getString(R.string.wireless_help_message))
+            .setPositiveButton(getString(R.string.got_it), null)
+            .setNeutralButton(getString(R.string.reset_wifi_title)) { _, _ ->
                 confirmWirelessReset()
             }.show()
     }
@@ -461,16 +461,16 @@ class DiPlayActivity : ComponentActivity() {
     }
 
     private fun confirmWirelessReset() {
-        AlertDialog.Builder(this).setTitle("Reset CarPlay Wi-Fi?")
-            .setMessage("This ends the existing Wi-Fi Direct connection, including one left behind after reinstalling. Close other projection apps first. Your car’s internet Wi-Fi stays on.")
-            .setPositiveButton("Reset and connect") { _, _ ->
+        AlertDialog.Builder(this).setTitle(getString(R.string.reset_wifi_title))
+            .setMessage(getString(R.string.reset_wifi_message))
+            .setPositiveButton(getString(R.string.reset_and_connect)) { _, _ ->
                 CarPlayBackgroundSession.stop { runOnUiThread { resetWirelessGroup() } }
-            }.setNegativeButton("Cancel", null).show()
+            }.setNegativeButton(getString(R.string.cancel), null).show()
     }
 
     private fun resetWirelessGroup() {
         val manager = getSystemService(android.net.wifi.p2p.WifiP2pManager::class.java)
-        if (manager == null) { toast("This head unit does not support Wi-Fi Direct."); return }
+        if (manager == null) { toast(getString(R.string.no_wifi_direct)); return }
         val channel = manager.initialize(this, mainLooper, null)
         try {
             manager.requestGroupInfo(channel) { group ->
@@ -483,7 +483,7 @@ class DiPlayActivity : ComponentActivity() {
                                 when {
                                     remaining == null -> { channel.close(); if (!isFinishing && !isDestroyed) connect(true) }
                                     android.os.SystemClock.elapsedRealtime() >= deadline -> {
-                                        channel.close(); toast("Wi-Fi Direct is still busy. Close the other projection app and try again.")
+                                        channel.close(); toast(getString(R.string.wifi_direct_busy))
                                     }
                                     else -> handler.postDelayed({ waitUntilRemoved() }, 200)
                                 }
@@ -491,53 +491,53 @@ class DiPlayActivity : ComponentActivity() {
                         }
                         waitUntilRemoved()
                     }
-                    override fun onFailure(reason: Int) { channel.close(); toast("Could not reset Wi-Fi Direct. Close the other projection app and try again.") }
+                    override fun onFailure(reason: Int) { channel.close(); toast(getString(R.string.wifi_direct_reset_failed)) }
                 })
             }
         } catch (_: SecurityException) {
-            channel.close(); permissionHelp("Wireless permissions", "Allow Nearby devices and, on older Android versions, Location before resetting CarPlay Wi-Fi.")
+            channel.close(); permissionHelp(getString(R.string.wireless_permissions_title), getString(R.string.wireless_permissions_message))
         }
     }
 
     private fun refreshStatus() {
         val running = CarPlayBackgroundSession.hasSession()
         status?.text = when {
-            setupError != null -> "Setup needs attention"
-            CarPlayBackgroundSession.active -> "CarPlay connected"
-            running -> "Connecting to your iPhone…"
-            DiPlayPreferences.phoneAddress(this) != null -> "Ready for ${DiPlayPreferences.phoneName(this)}"
-            else -> "Ready when you are"
+            setupError != null -> getString(R.string.status_setup_attention)
+            CarPlayBackgroundSession.active -> getString(R.string.status_connected)
+            running -> getString(R.string.status_connecting)
+            AndPlayPreferences.phoneAddress(this) != null -> getString(R.string.status_ready_for, AndPlayPreferences.phoneName(this))
+            else -> getString(R.string.status_ready_default)
         }
         if (lastRunning != running) {
-            connectButton?.text = if (running) "Open CarPlay" else "Connect phone"
+            connectButton?.text = if (running) getString(R.string.open_carplay) else getString(R.string.connect_phone)
             disconnectButton?.visibility = if (running) View.VISIBLE else View.GONE
             disconnectButton?.isEnabled = true
             lastRunning = running
         }
         connectButton?.isEnabled = setupError == null
     }
-    private fun reportFileName() = "DiPlay-${SimpleDateFormat("yyyyMMdd-HHmmss-SSS", Locale.US).format(Date())}.txt"
+    private fun reportFileName() = "AndPlay-${SimpleDateFormat("yyyyMMdd-HHmmss-SSS", Locale.US).format(Date())}.txt"
 
     private fun chooseReportDestination() {
         // Some head units omit or disable DocumentsUI. Launch itself can throw, before
         // the result callback and the background writer's exception handler ever run.
         runCatching { export.launch(reportFileName()) }.onFailure {
             toast(if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
-                "This head unit could not open a save location. Please try saving to Downloads again."
-                else "This head unit has no available file picker to save the report.")
+                getString(R.string.report_save_error_q)
+                else getString(R.string.report_save_error_legacy))
         }
     }
 
     private fun exportDiagnostics(uri: Uri? = null) {
         if (exportInProgress) return
         exportInProgress = true
-        exportButton?.apply { isEnabled = false; text = "Saving report…" }
+        exportButton?.apply { isEnabled = false; text = getString(R.string.saving_report) }
         val appContext = applicationContext
         val fileName = reportFileName()
         Thread({
             val result = runCatching {
                 val report = buildString {
-                    appendLine("DiPlay ${version()} · private beta diagnostic report")
+                    appendLine("AndPlay ${version()} · private beta diagnostic report")
                     appendLine("Android ${Build.VERSION.RELEASE} / API ${Build.VERSION.SDK_INT}")
                     appendLine("Head unit: ${Build.MANUFACTURER} ${Build.MODEL}")
                     appendLine("Connection: ${if (AirPlayPersistence.loadWirelessEnabled(appContext)) "wireless" else "USB"}")
@@ -567,26 +567,26 @@ class DiPlayActivity : ComponentActivity() {
             runOnUiThread {
                 exportInProgress = false
                 if (isFinishing || isDestroyed) return@runOnUiThread
-                exportButton?.apply { isEnabled = true; text = "Save diagnostic report" }
+                exportButton?.apply { isEnabled = true; text = getString(R.string.save_report) }
                 if (result.isSuccess) {
-                    AlertDialog.Builder(this).setTitle("Diagnostic report saved")
-                        .setMessage(if (uri == null) "Downloads/DiPlay/$fileName" else "Your report was saved to the selected location.")
-                        .setPositiveButton("Done", null).show()
+                    AlertDialog.Builder(this).setTitle(getString(R.string.report_saved_title))
+                        .setMessage(if (uri == null) "Downloads/AndPlay/$fileName" else getString(R.string.report_saved_location))
+                        .setPositiveButton(getString(R.string.done), null).show()
                 } else {
-                    AlertDialog.Builder(this).setTitle("Could not save the report")
-                        .setMessage("Check that storage is available, or choose another save location.")
-                        .setPositiveButton("Choose location") { _, _ -> chooseReportDestination() }
-                        .setNegativeButton("Close", null).show()
+                    AlertDialog.Builder(this).setTitle(getString(R.string.report_save_failed_title))
+                        .setMessage(getString(R.string.report_save_failed_message))
+                        .setPositiveButton(getString(R.string.choose_location)) { _, _ -> chooseReportDestination() }
+                        .setNegativeButton(getString(R.string.close), null).show()
                 }
             }
-        }, "diplay-export").start()
+        }, "andplay-export").start()
     }
     private fun permissionHelp(title: String, body: String) {
-        AlertDialog.Builder(this).setTitle(title).setMessage(body).setPositiveButton("App settings") { _, _ ->
+        AlertDialog.Builder(this).setTitle(title).setMessage(body).setPositiveButton(getString(R.string.app_settings)) { _, _ ->
             openSystem(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:$packageName")))
-        }.setNegativeButton("Later", null).show()
+        }.setNegativeButton(getString(R.string.later), null).show()
     }
-    private fun openSystem(intent: Intent) { runCatching { startActivity(intent) }.onFailure { toast("Open this setting from your car’s Settings app.") } }
+    private fun openSystem(intent: Intent) { runCatching { startActivity(intent) }.onFailure { toast(getString(R.string.settings_unavailable)) } }
     private fun toast(message: String) { Toast.makeText(this, message, Toast.LENGTH_LONG).show() }
     private fun version() = packageManager.getPackageInfo(packageName, 0).versionName ?: "0.1.0-beta.1"
     private fun section(parent: LinearLayout, title: String, build: (LinearLayout) -> Unit) {
@@ -607,7 +607,7 @@ class DiPlayActivity : ComponentActivity() {
             var pendingSelection = selection
             AlertDialog.Builder(this).setTitle(title)
                 .setSingleChoiceItems(options.toTypedArray(), selection) { _, index -> pendingSelection = index }
-                .setPositiveButton(if (CarPlayBackgroundSession.hasSession()) "Apply and reconnect" else "Save") { _, _ ->
+                .setPositiveButton(if (CarPlayBackgroundSession.hasSession()) getString(R.string.apply_and_reconnect) else getString(R.string.save)) { _, _ ->
                     if (pendingSelection != selection) {
                         selection = pendingSelection
                         save(selection)
@@ -616,7 +616,7 @@ class DiPlayActivity : ComponentActivity() {
                             connect(AirPlayPersistence.loadWirelessEnabled(this))
                         }
                     }
-                }.setNegativeButton("Cancel", null).show()
+                }.setNegativeButton(getString(R.string.cancel), null).show()
         }
         parent.addView(button, matchButton(0, 60)); parent.addView(space(12))
     }

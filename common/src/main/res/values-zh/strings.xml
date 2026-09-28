@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: AGPL-3.0-only -->
+<!-- Simplified Chinese translation of the AndPlay interface. -->
+<resources>
+    <!-- Shared button and dialog labels -->
+    <string name="back">返回</string>
+    <string name="cancel">取消</string>
+    <string name="save">保存</string>
+    <string name="connect">连接</string>
+    <string name="done">完成</string>
+    <string name="close">关闭</string>
+    <string name="got_it">知道了</string>
+    <string name="later">稍后</string>
+    <string name="apply_and_reconnect">应用并重新连接</string>
+    <string name="app_settings">应用设置</string>
+
+    <!-- Header and home -->
+    <string name="car_home">返回桌面</string>
+    <string name="hero_kicker">你的手机，你的旅程。</string>
+    <string name="hero_title">熟悉的驾乘体验。</string>
+    <string name="hero_subtitle">导航、音乐、通话，一应俱全。\nCarPlay，就在你的车机屏幕上。</string>
+    <string name="wireless_carplay">无线 CARPLAY</string>
+    <string name="status_ready_default">随时准备连接</string>
+    <string name="status_ready_for">已就绪，等待连接 %1$s</string>
+    <string name="status_setup_attention">初始化需要处理</string>
+    <string name="status_connected">CarPlay 已连接</string>
+    <string name="status_connecting">正在连接你的 iPhone……</string>
+    <string name="setup_error">本地初始化未能完成。请重新安装完整的 AndPlay 测试版 APK 后重试。</string>
+    <string name="connect_phone">连接手机</string>
+    <string name="open_carplay">打开 CarPlay</string>
+    <string name="disconnect">断开连接</string>
+    <string name="choose_iphone">选择 iPhone</string>
+    <string name="choose_iphone_with_name">选择 iPhone · %1$s</string>
+    <string name="pair_hint">先将 iPhone 与车机蓝牙配对，再开始连接。\n请保持蓝牙和 Wi-Fi 开启。</string>
+    <string name="hotspot_off_home_hint">车载热点“%1$s”当前已关闭。请先在车机设置中开启，再进行连接。</string>
+    <string name="open_car_hotspot_settings">打开车载热点设置</string>
+    <string name="connect_usb">使用 USB 连接</string>
+    <string name="usb_hint">将 iPhone 插入 USB 数据线接口。\n当 iPhone 弹出询问时允许使用 CarPlay。</string>
+    <string name="settings">设置</string>
+    <string name="settings_hint">让 AndPlay 更贴合你的爱车。</string>
+    <string name="public_preview_version">公开预览版  ·  %1$s</string>
+    <string name="carplay_icon_desc">CarPlay 图标</string>
+
+    <!-- Settings page -->
+    <string name="settings_title">你的旅程，由你做主。</string>
+    <string name="settings_subtitle">应用后会为图标大小、分辨率、音乐缓冲和帧率重新连接 CarPlay。其他更改将在下次连接时生效。</string>
+    <string name="section_auto_connection">自动连接</string>
+    <string name="auto_connect_title">打开 AndPlay 时自动连接</string>
+    <string name="auto_connect_desc">沿用上次的连接方式和已选择的 iPhone。</string>
+    <string name="auto_start_title">车辆启动后自动打开</string>
+    <string name="auto_start_desc">是否可用取决于你车机系统的开机设置。</string>
+    <string name="section_wireless_connection">无线连接</string>
+    <string name="section_display_performance">显示与性能</string>
+    <string name="carplay_size">CarPlay 界面大小</string>
+    <string name="carplay_size_desc">调整 CarPlay 图标和文字的大小。应用新的大小会重新连接 CarPlay。</string>
+    <string name="resolution">分辨率</string>
+    <string name="resolution_native">原生分辨率</string>
+    <string name="resolution_80">80% · 负担更轻</string>
+    <string name="resolution_60">60% · 负担最轻</string>
+    <string name="music_buffer">音乐缓冲</string>
+    <string name="music_buffer_300">300 毫秒 · 默认</string>
+    <string name="music_buffer_500">500 毫秒</string>
+    <string name="music_buffer_1000">1000 毫秒 · 最稳定</string>
+    <string name="frame_rate">帧率</string>
+    <string name="frame_rate_30">30 帧 · 负担更轻</string>
+    <string name="frame_rate_60">60 帧 · 画面更流畅</string>
+    <string name="efficient_video">高效视频</string>
+    <string name="efficient_video_desc">使用 HEVC 编码。如需兼容更多车机，请保持关闭。</string>
+    <string name="rhd">右舵驾驶</string>
+    <string name="rhd_desc">让 CarPlay 的控件更靠近驾驶员一侧。</string>
+    <string name="full_screen">全屏显示</string>
+    <string name="full_screen_desc">打开 CarPlay 时隐藏车机系统状态栏和导航栏。</string>
+    <string name="section_byd_navigation">比亚迪导航</string>
+    <string name="byd_hud_title">导航信息显示在 HUD 和仪表盘</string>
+    <string name="byd_hud_desc">在受支持的比亚迪屏幕上显示手机导航的转向箭头、距离和街道名称。车型兼容性因人而异。</string>
+    <string name="section_permissions">权限与连接帮助</string>
+    <string name="permissions_desc">“附近的设备”权限用于连接你的 iPhone；麦克风权限用于 Siri 和通话；较旧的 Android 版本进行无线设置时还需要位置权限；USB 模式可能会请求本地 VPN 连接。</string>
+    <string name="app_permissions">应用权限</string>
+    <string name="bluetooth_settings">蓝牙设置</string>
+    <string name="wireless_help">无线连接帮助</string>
+    <string name="section_about_diagnostics">关于与诊断</string>
+    <string name="about_andplay">关于 AndPlay</string>
+    <string name="save_report">保存诊断报告</string>
+    <string name="saving_report">正在保存报告……</string>
+    <string name="report_destination_q">"报告会保存到 Downloads/AndPlay 目录。"</string>
+    <string name="report_destination_legacy">"请选择报告的保存位置。"</string>
+    <string name="report_privacy_note">不会自动发送任何内容。协议数据和凭据均已排除。</string>
+
+    <!-- Wireless link controls -->
+    <string name="wireless_link">无线链路</string>
+    <string name="wireless_link_button">无线链路 · %1$s</string>
+    <string name="wireless_link_wifi_p2p">Wi-Fi 直连 · 默认</string>
+    <string name="wireless_link_car_hotspot">车载热点</string>
+    <string name="wireless_link_p2p_desc">AndPlay 会为 iPhone 创建自己的 Wi-Fi 直连网络。</string>
+    <string name="hotspot_name_button">热点名称 · %1$s</string>
+    <string name="hotspot_password_button">热点密码 · %1$s</string>
+    <string name="hotspot_password_none">无</string>
+    <string name="hotspot_name_hint">车载热点名称</string>
+    <string name="hotspot_password_hint">车载热点密码</string>
+    <string name="hotspot_credentials_desc">请先在车机设置中开启热点，并在此输入相同的名称和密码。iPhone 将加入该网络以使用 CarPlay。更改将在下次连接时生效。</string>
+
+    <!-- Dialogs and flows -->
+    <string name="hotspot_off_dialog_title">车载热点未开启</string>
+    <string name="hotspot_off_dialog_message">AndPlay 通过车载热点“%1$s”进行连接。请先在车机设置中开启热点，再进行连接。</string>
+    <string name="open_car_settings">打开车机设置</string>
+    <string name="bluetooth_on_title">请开启蓝牙</string>
+    <string name="bluetooth_on_message">请先开启车机蓝牙并配对你的 iPhone。</string>
+    <string name="open_bluetooth">打开蓝牙设置</string>
+    <string name="pair_iphone_title">配对你的 iPhone</string>
+    <string name="pair_iphone_message">请在 iPhone 上打开“设置 → 蓝牙”，与车机完成配对，然后回到 AndPlay 选择“连接手机”。</string>
+    <string name="choose_iphone_title">选择你的 iPhone</string>
+    <string name="paired_device">已配对的设备</string>
+    <string name="pair_another">配对其他设备</string>
+    <string name="wireless_help_message">请将 iPhone 与车机蓝牙配对，保持 Wi-Fi 开启，并在 iPhone 上允许使用 CarPlay。同时请关闭其他手机投屏应用。\n\n如果之前的投屏应用残留了连接，请在下方重置 CarPlay Wi-Fi 后重新连接。车机正常的上网 Wi-Fi 不受影响。</string>
+    <string name="reset_wifi_title">重置 CarPlay Wi-Fi？</string>
+    <string name="reset_wifi_message">这将断开现有的 Wi-Fi 直连连接，包括重装应用后残留的连接。请先关闭其他投屏应用。车机的上网 Wi-Fi 不受影响。</string>
+    <string name="reset_and_connect">重置并连接</string>
+    <string name="no_wifi_direct">该车机系统不支持 Wi-Fi 直连。</string>
+    <string name="wifi_direct_busy">Wi-Fi 直连仍被占用。请关闭其他投屏应用后重试。</string>
+    <string name="wifi_direct_reset_failed">无法重置 Wi-Fi 直连。请关闭其他投屏应用后重试。</string>
+    <string name="wireless_permissions_title">无线连接权限</string>
+    <string name="wireless_permissions_message">重置 CarPlay Wi-Fi 前，请允许“附近的设备”权限；较旧的 Android 版本还需要位置权限。</string>
+    <string name="nearby_devices">附近的设备</string>
+    <string name="nearby_devices_permission">请允许“附近的设备”权限，以便 AndPlay 连接你已配对的 iPhone。</string>
+    <string name="report_save_error_q">该车机系统无法打开保存位置，请重试并选择保存到“下载”目录。</string>
+    <string name="report_save_error_legacy">该车机系统没有可用于保存报告的文件选择器。</string>
+    <string name="report_saved_title">诊断报告已保存</string>
+    <string name="report_saved_location">报告已保存到你选择的位置。</string>
+    <string name="report_save_failed_title">无法保存报告</string>
+    <string name="report_save_failed_message">请检查存储空间是否可用，或另选一个保存位置。</string>
+    <string name="choose_location">选择位置</string>
+    <string name="settings_unavailable">请在车机的“设置”应用中打开该页面。</string>
+
+    <!-- About page -->
+    <string name="about_tagline">CarPlay，安家在你的车里。</string>
+    <string name="about_preview_section">公开预览版 · %1$s</string>
+    <string name="about_preview_body">这是一款面向 Android 车机的独立 CarPlay 接收端。有线和无线连接都在车机上运行，认证在本地完成。普通 iPhone 无需越狱、Mac、外接配件或登录即可连接。\n\n本预览版使用实验性的配件身份。与所有 iPhone 和车机的兼容性仍在验证中。这不是苹果认证的产品。</string>
+    <string name="about_oss_section">开源成就此举</string>
+    <string name="about_oss_body">接收端基于 xcertplay，采用 GPL-3.0 许可。AndPlay 的界面沿用 DiAuto 的设计，采用 AGPL-3.0 许可。\n\n包含 AndroidX、Bouncy Castle、JmDNS 和 SLF4J。源代码与许可声明随本版本一同发布。\n\nCarPlay 及 CarPlay 图标属于 Apple Inc.。AndPlay 是一个独立项目。</string>
+
+    <!-- MainActivity diagnostics screen -->
+    <string name="i2c_title">主板 I2C 诊断</string>
+    <string name="i2c_device_label">Linux I2C 设备</string>
+    <string name="i2c_run_check">运行 MFi 自检</string>
+    <string name="i2c_ch341_note">CH341 需要根据具体部署配置 VID/PID。</string>
+    <string name="diag_idle">空闲</string>
+    <string name="diag_running">运行中……</string>
+    <string name="diag_failed">失败：%1$s</string>
+    <string name="diag_scan_interrupted">MFi 扫描被中断</string>
+    <string name="diag_found_none">已找到：无</string>
+    <string name="diag_found_chip">已找到：%1$s；设备版本：%2$s；协议主版本（原始值）：%3$s</string>
+</resources>

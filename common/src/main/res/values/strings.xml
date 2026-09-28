@@ -1,3 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: AGPL-3.0-only -->
+<!-- UI copy adapted from DiAuto. See docs/THIRD_PARTY_NOTICES.md. -->
 <resources>
-    <string name="app_name">DiPlay</string>
+    <!-- Brand marks: identical in every language. -->
+    <string name="andplay_brand" translatable="false">AndPlay</string>
+    <string name="carplay" translatable="false">CarPlay</string>
+    <string name="iphone" translatable="false">iPhone</string>
+
+    <!-- Shared button and dialog labels -->
+    <string name="back">Back</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="connect">Connect</string>
+    <string name="done">Done</string>
+    <string name="close">Close</string>
+    <string name="got_it">Got it</string>
+    <string name="later">Later</string>
+    <string name="apply_and_reconnect">Apply and reconnect</string>
+    <string name="app_settings">App settings</string>
+
+    <!-- Header and home -->
+    <string name="car_home">Car home</string>
+    <string name="hero_kicker">YOUR PHONE. YOUR DRIVE.</string>
+    <string name="hero_title">A familiar drive.</string>
+    <string name="hero_subtitle">Your maps, music and conversations.\nCarPlay, right here on your car display.</string>
+    <string name="wireless_carplay">WIRELESS CARPLAY</string>
+    <string name="status_ready_default">Ready when you are</string>
+    <string name="status_ready_for">Ready for %1$s</string>
+    <string name="status_setup_attention">Setup needs attention</string>
+    <string name="status_connected">CarPlay connected</string>
+    <string name="status_connecting">Connecting to your iPhone…</string>
+    <string name="setup_error">Local setup could not finish. Reinstall the complete AndPlay beta APK and try again.</string>
+    <string name="connect_phone">Connect phone</string>
+    <string name="open_carplay">Open CarPlay</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="choose_iphone">Choose iPhone</string>
+    <string name="choose_iphone_with_name">Choose iPhone · %1$s</string>
+    <string name="pair_hint">Pair your iPhone with the car’s Bluetooth, then connect.\nKeep Bluetooth and Wi-Fi on.</string>
+    <string name="hotspot_off_home_hint">The car hotspot “%1$s” is off. Turn it on in the car settings before connecting.</string>
+    <string name="open_car_hotspot_settings">Open car hotspot settings</string>
+    <string name="connect_usb">Connect with USB</string>
+    <string name="usb_hint">Plug your iPhone into a USB data port.\nAllow CarPlay when your iPhone asks.</string>
+    <string name="settings">Settings</string>
+    <string name="settings_hint">Make AndPlay feel right for your car.</string>
+    <string name="public_preview_version">PUBLIC PREVIEW  ·  %1$s</string>
+    <string name="carplay_icon_desc">CarPlay icon</string>
+
+    <!-- Settings page -->
+    <string name="settings_title">Your drive, your way.</string>
+    <string name="settings_subtitle">Apply reconnects CarPlay for size, resolution, music buffer and frame rate. Other changes apply to your next connection.</string>
+    <string name="section_auto_connection">Automatic connection</string>
+    <string name="auto_connect_title">Connect when AndPlay opens</string>
+    <string name="auto_connect_desc">Use your last connection type and selected iPhone.</string>
+    <string name="auto_start_title">Open after the car starts</string>
+    <string name="auto_start_desc">Availability depends on your head unit’s startup settings.</string>
+    <string name="section_wireless_connection">Wireless connection</string>
+    <string name="section_display_performance">Display and performance</string>
+    <string name="carplay_size">CarPlay size</string>
+    <string name="carplay_size_desc">Changes the size of CarPlay icons and text. Applying a size reconnects CarPlay.</string>
+    <string name="resolution">Resolution</string>
+    <string name="resolution_native">Native</string>
+    <string name="resolution_80">80% · lighter load</string>
+    <string name="resolution_60">60% · lightest load</string>
+    <string name="music_buffer">Music buffer</string>
+    <string name="music_buffer_300">300 ms · default</string>
+    <string name="music_buffer_500">500 ms</string>
+    <string name="music_buffer_1000">1000 ms · most stable</string>
+    <string name="frame_rate">Frame rate</string>
+    <string name="frame_rate_30">30 fps · lighter load</string>
+    <string name="frame_rate_60">60 fps · smoother motion</string>
+    <string name="efficient_video">Efficient video</string>
+    <string name="efficient_video_desc">Use HEVC. Leave off for the widest head-unit compatibility.</string>
+    <string name="rhd">Right-hand drive</string>
+    <string name="rhd_desc">Place CarPlay’s controls closer to the driver.</string>
+    <string name="full_screen">Full screen</string>
+    <string name="full_screen_desc">Hide the car’s system bars while CarPlay is open.</string>
+    <string name="section_byd_navigation">BYD navigation</string>
+    <string name="byd_hud_title">Navigation on HUD and instrument cluster</string>
+    <string name="byd_hud_desc">Show phone navigation arrows, distance and street names on supported BYD displays. Vehicle compatibility varies.</string>
+    <string name="section_permissions">Permissions and connection help</string>
+    <string name="permissions_desc">Nearby devices connects your iPhone. Microphone enables Siri and calls. Older Android versions also require Location for wireless setup. USB mode may ask for a local VPN connection.</string>
+    <string name="app_permissions">App permissions</string>
+    <string name="bluetooth_settings">Bluetooth settings</string>
+    <string name="wireless_help">Wireless connection help</string>
+    <string name="section_about_diagnostics">About and diagnostics</string>
+    <string name="about_andplay">About AndPlay</string>
+    <string name="save_report">Save diagnostic report</string>
+    <string name="saving_report">Saving report…</string>
+    <string name="report_destination_q">"Reports save to Downloads/AndPlay. "</string>
+    <string name="report_destination_legacy">"Choose where to save your report. "</string>
+    <string name="report_privacy_note">Nothing is sent automatically. Protocol payloads and credentials are excluded.</string>
+
+    <!-- Wireless link controls -->
+    <string name="wireless_link">Wireless link</string>
+    <string name="wireless_link_button">Wireless link · %1$s</string>
+    <string name="wireless_link_wifi_p2p">Wi-Fi Direct · default</string>
+    <string name="wireless_link_car_hotspot">Car hotspot</string>
+    <string name="wireless_link_p2p_desc">AndPlay creates its own Wi-Fi Direct network for the iPhone.</string>
+    <string name="hotspot_name_button">Hotspot name · %1$s</string>
+    <string name="hotspot_password_button">Hotspot password · %1$s</string>
+    <string name="hotspot_password_none">none</string>
+    <string name="hotspot_name_hint">Car hotspot name</string>
+    <string name="hotspot_password_hint">Car hotspot password</string>
+    <string name="hotspot_credentials_desc">Turn on the hotspot in the car settings first and enter the same name and password here. The iPhone joins this network for CarPlay. Changes apply to your next connection.</string>
+
+    <!-- Dialogs and flows -->
+    <string name="hotspot_off_dialog_title">Car hotspot is off</string>
+    <string name="hotspot_off_dialog_message">AndPlay connects through the car hotspot “%1$s”. Turn it on in the car settings, then connect.</string>
+    <string name="open_car_settings">Open car settings</string>
+    <string name="bluetooth_on_title">Turn on Bluetooth</string>
+    <string name="bluetooth_on_message">Enable the car’s Bluetooth and pair your iPhone first.</string>
+    <string name="open_bluetooth">Open Bluetooth</string>
+    <string name="pair_iphone_title">Pair your iPhone</string>
+    <string name="pair_iphone_message">On your iPhone, open Settings → Bluetooth and pair with the car. Then return to AndPlay and choose Connect phone.</string>
+    <string name="choose_iphone_title">Choose your iPhone</string>
+    <string name="paired_device">Paired device</string>
+    <string name="pair_another">Pair another</string>
+    <string name="wireless_help_message">Pair your iPhone with the car’s Bluetooth, keep Wi-Fi on, and allow CarPlay on the iPhone. Close any other phone-projection app.\n\nIf a previous projection app left its connection running, reset CarPlay Wi-Fi below and connect again. Your car’s normal internet Wi-Fi stays on.</string>
+    <string name="reset_wifi_title">Reset CarPlay Wi-Fi?</string>
+    <string name="reset_wifi_message">This ends the existing Wi-Fi Direct connection, including one left behind after reinstalling. Close other projection apps first. Your car’s internet Wi-Fi stays on.</string>
+    <string name="reset_and_connect">Reset and connect</string>
+    <string name="no_wifi_direct">This head unit does not support Wi-Fi Direct.</string>
+    <string name="wifi_direct_busy">Wi-Fi Direct is still busy. Close the other projection app and try again.</string>
+    <string name="wifi_direct_reset_failed">Could not reset Wi-Fi Direct. Close the other projection app and try again.</string>
+    <string name="wireless_permissions_title">Wireless permissions</string>
+    <string name="wireless_permissions_message">Allow Nearby devices and, on older Android versions, Location before resetting CarPlay Wi-Fi.</string>
+    <string name="nearby_devices">Nearby devices</string>
+    <string name="nearby_devices_permission">Allow Nearby devices so AndPlay can connect to your paired iPhone.</string>
+    <string name="report_save_error_q">This head unit could not open a save location. Please try saving to Downloads again.</string>
+    <string name="report_save_error_legacy">This head unit has no available file picker to save the report.</string>
+    <string name="report_saved_title">Diagnostic report saved</string>
+    <string name="report_saved_location">Your report was saved to the selected location.</string>
+    <string name="report_save_failed_title">Could not save the report</string>
+    <string name="report_save_failed_message">Check that storage is available, or choose another save location.</string>
+    <string name="choose_location">Choose location</string>
+    <string name="settings_unavailable">Open this setting from your car’s Settings app.</string>
+
+    <!-- About page -->
+    <string name="about_tagline">CarPlay, at home in your car.</string>
+    <string name="about_preview_section">Public preview · %1$s</string>
+    <string name="about_preview_body">An independent CarPlay receiver for Android head units. Wired and wireless connections run on the head unit, with local authentication. A standard iPhone can connect without a jailbreak, Mac, dongle or sign-in.\n\nThis preview uses an experimental accessory identity. Compatibility with every iPhone and head unit is still being tested. It is not an Apple-certified product.</string>
+    <string name="about_oss_section">Made possible by open source</string>
+    <string name="about_oss_body">Receiver based on xcertplay, licensed under GPL-3.0. AndPlay’s interface follows DiAuto’s design, licensed under AGPL-3.0.\n\nIncludes AndroidX, Bouncy Castle, JmDNS and SLF4J. Source and license notices accompany this release.\n\nCarPlay and the CarPlay icon belong to Apple Inc. AndPlay is an independent project.</string>
+
+    <!-- MainActivity diagnostics screen -->
+    <string name="i2c_title">Board I2C diagnostic</string>
+    <string name="i2c_device_label">Linux I2C device</string>
+    <string name="i2c_run_check">Run MFi self-check</string>
+    <string name="i2c_ch341_note">CH341 requires deployment-specific VID/PID configuration.</string>
+    <string name="diag_idle">Idle</string>
+    <string name="diag_running">Running…</string>
+    <string name="diag_failed">Failed: %1$s</string>
+    <string name="diag_scan_interrupted">MFi scan interrupted</string>
+    <string name="diag_found_none">Found: none</string>
+    <string name="diag_found_chip">Found: %1$s; device version: %2$s; protocol major (raw): %3$s</string>
 </resources>

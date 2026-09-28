@@ -4,7 +4,7 @@ plugins {
 }
 
 // Optional local-only input. CI and ordinary source builds contain no accessory identity.
-val localAuthenticationAssets = providers.environmentVariable("DIPLAY_AUTH_ASSETS_DIR")
+val localAuthenticationAssets = providers.environmentVariable("ANDPLAY_AUTH_ASSETS_DIR")
     .orNull?.let { file(it).canonicalFile }
 
 android {
@@ -14,7 +14,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.shihab.diplay"
+        applicationId = "com.shihab.andplay"
         minSdk = 28
         targetSdk = 37
         versionCode = 20
